@@ -1,0 +1,13 @@
+name: snowflake-demo
+channels:
+  - https://repo.anaconda.com/pkgs/snowflake
+  - nodefaults
+dependencies:
+  - python=3.9
+  - pip
+  - openssl=1.1.1
+  - pip:
+    # Snowflake
+    - snowflake-cli-labs
+    - snowflake-snowpark-python
+    - snowflake

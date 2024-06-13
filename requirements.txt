@@ -1,0 +1,3 @@
+snowflake-cli-labs
+snowflake-snowpark-python
+snowflake
