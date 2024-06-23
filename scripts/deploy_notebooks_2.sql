@@ -12,7 +12,7 @@ Last Updated: 6/11/2024
 -- Create the Notebooks
 --USE SCHEMA {{env}}_SCHEMA;
 
-CREATE OR REPLACE NOTEBOOK IDENTIFIER('"DEMO_DB"."{{env}}_SCHEMA"."{{env}}my_file"')
+CREATE OR REPLACE NOTEBOOK IDENTIFIER('"DEMO_DB"."{{env}}_SCHEMA"."{{env}}_my_file"')
     FROM '@"DEMO_DB"."INTEGRATIONS"."DEMO_GIT_REPO"/branches/"{{branch}}"/notebooks/my_file/'
     QUERY_WAREHOUSE = 'DEMO_WH'
     MAIN_FILE = 'my_file.ipynb';
