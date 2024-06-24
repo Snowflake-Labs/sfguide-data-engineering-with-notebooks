@@ -1,13 +1,7 @@
-name: snowflake-demo
+name: app_environment
 channels:
-  - https://repo.anaconda.com/pkgs/snowflake
-  - nodefaults
+  - snowflake
 dependencies:
-  - python=3.9
-  - pip
-  - openssl=1.1.1
-  - pip:
-    # Snowflake
-    - snowflake-cli-labs
-    - snowflake-snowpark-python
-    - snowflake
+  - python=3.9.*
+  - snowbooks=1.32.0
+  - streamlit=1.26.0
