@@ -6,4 +6,6 @@ This repository contains the code for the *Data Engineering with Notebooks* Snow
 ___
 Here is an overview of what we'll build in this tutorial:
 
+Olli
+
 <img src="images/quickstart_overview.png" width=800px>
