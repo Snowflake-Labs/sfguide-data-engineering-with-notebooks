@@ -17,7 +17,7 @@ def main(session: Session, database_name, schema_name) -> str:
     env = 'PROD' if schema_name == 'PROD_SCHEMA' else 'DEV'
     session.use_schema(f"{database_name}.{schema_name}")
 
-    warehouse_name = "DEMO_WH"
+    warehouse_name = "COMPUTE_WH"
     dag_name = "DEMO_DAG"
     api_root = Root(session)
     schema = api_root.databases[database_name].schemas[schema_name]
