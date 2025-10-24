@@ -3,6 +3,7 @@
 # Script:       deploy_task_dag.py
 # Author:       Jeremiah Hansen
 # Last Updated: 6/11/2024
+# Last Updated  10/24/2025 - updating variables to work with my database
 #------------------------------------------------------------------------------
 
 
@@ -17,7 +18,7 @@ def main(session: Session, database_name, schema_name) -> str:
     env = 'PROD' if schema_name == 'PROD_SCHEMA' else 'DEV'
     session.use_schema(f"{database_name}.{schema_name}")
 
-    warehouse_name = "DEMO_WH"
+    warehouse_name = "COMPUTE_WH"
     dag_name = "DEMO_DAG"
     api_root = Root(session)
     schema = api_root.databases[database_name].schemas[schema_name]
@@ -47,3 +48,4 @@ if __name__ == "__main__":
             print(main(session, *sys.argv[1:]))  # type: ignore
         else:
             print(main(session))  # type: ignore
+print('heyyo bromney change')
