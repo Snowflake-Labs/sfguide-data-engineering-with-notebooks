@@ -11,3 +11,5 @@ dependencies:
     - snowflake-cli-labs
     - snowflake-snowpark-python
     - snowflake
+  - name: Private Key Setup
+  run: echo "${{ secrets.PRIVATE_KEY_VAL }}" | base64 --decode > rsa_key.p8
