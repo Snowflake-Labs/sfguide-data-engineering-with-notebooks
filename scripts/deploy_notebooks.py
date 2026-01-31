@@ -53,4 +53,4 @@ if __name__ == "__main__":
         if len(sys.argv) > 4:
             print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
         else:
-            print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project_name> <local_folder_path>")
+            print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project> <local_folder_path>")
