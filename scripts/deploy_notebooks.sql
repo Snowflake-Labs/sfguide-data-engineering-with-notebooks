@@ -4,10 +4,10 @@
 Hands-On Lab: Intro to Data Engineering with Notebooks
 Script:       deploy_notebooks.sql
 Author:       Jeremiah Hansen
-Last Updated: 6/11/2024
+Last Updated: 1/30/2026
 -----------------------------------------------------------------------------*/
 
--- See https://docs.snowflake.com/en/LIMITEDACCESS/execute-immediate-from-template
+-- See https://docs.snowflake.com/en/sql-reference/sql/execute-immediate-from
 
 -- Create the Notebooks
 --USE SCHEMA {{env}}_SCHEMA;

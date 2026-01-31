@@ -2,7 +2,7 @@
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       deploy_task_dag.py
 # Author:       Jeremiah Hansen
-# Last Updated: 6/11/2024
+# Last Updated: 1/30/2026
 #------------------------------------------------------------------------------
 
 
