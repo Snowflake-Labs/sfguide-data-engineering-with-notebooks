@@ -20,6 +20,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     dag_name = "DEMO_DAG"
     compute_pool = "SYSTEM_COMPUTE_POOL_CPU"
     runtime = "V2.2-CPU-PY3.12"
+    external_access_integration = "pypi_access"
 
     api_root = Root(session)
     schema = api_root.databases[database_name].schemas[schema_name]
@@ -38,6 +39,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
                 COMPUTE_POOL = {compute_pool}
                 RUNTIME = '{runtime}'
                 QUERY_WAREHOUSE = {warehouse_name}
+                EXTERNAL_ACCESS_INTEGRATIONS = ('{external_access_integration}')
                 ARGUMENTS = '--database-name {database_name} --schema-name {schema_name}'
             ''', warehouse=warehouse_name)
         dag_task2 = DAGTask("LOAD_DAILY_CITY_METRICS", definition=f'''
@@ -66,9 +68,8 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 if __name__ == "__main__":
     import sys
 
-    # Create a local Snowpark session
-    with Session.builder.getOrCreate() as session:
-        if len(sys.argv) > 3:
-            print(main(session, sys.argv[1], sys.argv[2], sys.argv[3]))
-        else:
-            print("Usage: python deploy_task_dag.py <database> <schema> <notebook_project>")
+    session = Session.builder.getOrCreate()
+    if len(sys.argv) > 3:
+        print(main(session, sys.argv[1], sys.argv[2], sys.argv[3]))
+    else:
+        print("Usage: python deploy_task_dag.py <database> <schema> <notebook_project>")

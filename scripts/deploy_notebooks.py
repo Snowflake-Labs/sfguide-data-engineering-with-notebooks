@@ -48,9 +48,8 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 if __name__ == "__main__":
     import sys
 
-    # Create a local Snowpark session
-    with Session.builder.getOrCreate() as session:
-        if len(sys.argv) > 4:
-            print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
-        else:
-            print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project> <local_folder_path>")
+    session = Session.builder.getOrCreate()
+    if len(sys.argv) > 4:
+        print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
+    else:
+        print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project> <local_folder_path>")
