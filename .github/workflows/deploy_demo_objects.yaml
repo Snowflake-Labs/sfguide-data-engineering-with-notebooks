@@ -36,6 +36,7 @@ jobs:
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+          MAX_CON_RETRY_ATTEMPTS: 0
         run: |
           python $GITHUB_WORKSPACE/scripts/deploy_notebooks.py DEMO_DB PROD_SCHEMA NOTEBOOK_PIPELINES $GITHUB_WORKSPACE/notebooks
           python $GITHUB_WORKSPACE/scripts/deploy_task_dag.py DEMO_DB PROD_SCHEMA NOTEBOOK_PIPELINES
