@@ -3,6 +3,7 @@
 
 # Snowflake Workspace
 .snowflake/
+.snowconfig/
 
 # Jupyter/Notebook checkpoints
 .ipynb_checkpoints/
