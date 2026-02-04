@@ -2,7 +2,7 @@
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       deploy_task_dag.py
 # Author:       Jeremiah Hansen
-# Last Updated: 1/30/2026
+# Last Updated: 2/2/2026
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
@@ -20,7 +20,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     dag_name = "DEMO_DAG"
     compute_pool = "SYSTEM_COMPUTE_POOL_CPU"
     runtime = "V2.2-CPU-PY3.12"
-    external_access_integration = "pypi_access"
+    external_access_integration = "PYPI_ACCESS_INTEGRATION"
 
     api_root = Root(session)
     schema = api_root.databases[database_name].schemas[schema_name]
