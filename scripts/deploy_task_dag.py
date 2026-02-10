@@ -2,7 +2,7 @@
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       deploy_task_dag.py
 # Author:       Jeremiah Hansen
-# Last Updated: 2/2/2026
+# Last Updated: 2/9/2026
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
@@ -35,7 +35,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     with DAG(dag_name, schedule=timedelta(days=1), warehouse=warehouse_name) as dag:
         dag_task1 = DAGTask("LOAD_EXCEL_FILES_TASK", definition=f'''
             EXECUTE NOTEBOOK PROJECT {database_name}.{schema_name}.{notebook_project_name}
-                MAIN_FILE = '06_load_excel_files.ipynb'
+                MAIN_FILE = '01_load_excel_files.ipynb'
                 COMPUTE_POOL = {compute_pool}
                 RUNTIME = '{runtime}'
                 QUERY_WAREHOUSE = {warehouse_name}
@@ -44,7 +44,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
             ''', warehouse=warehouse_name)
         dag_task2 = DAGTask("LOAD_DAILY_CITY_METRICS", definition=f'''
             EXECUTE NOTEBOOK PROJECT {database_name}.{schema_name}.{notebook_project_name}
-                MAIN_FILE = '07_load_daily_city_metrics.ipynb'
+                MAIN_FILE = '02_load_daily_city_metrics.ipynb'
                 COMPUTE_POOL = {compute_pool}
                 RUNTIME = '{runtime}'
                 QUERY_WAREHOUSE = {warehouse_name}
@@ -54,8 +54,8 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
         # Define the dependencies between the tasks
         dag_task1 >> dag_task2 # dag_task1 is a predecessor of dag_task2
 
-    print(f"  Task 1: LOAD_EXCEL_FILES_TASK -> 06_load_excel_files.ipynb")
-    print(f"  Task 2: LOAD_DAILY_CITY_METRICS -> 07_load_daily_city_metrics.ipynb")
+    print(f"  Task 1: LOAD_EXCEL_FILES_TASK -> 01_load_excel_files.ipynb")
+    print(f"  Task 2: LOAD_DAILY_CITY_METRICS -> 02_load_daily_city_metrics.ipynb")
 
     # Create the DAG in Snowflake
     print(f"Deploying DAG to {database_name}.{schema_name}...")
