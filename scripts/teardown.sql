@@ -2,7 +2,7 @@
 Hands-On Lab: Intro to Data Engineering with Notebooks
 Script:       teardown.sql
 Author:       Jeremiah Hansen
-Last Updated: 2/9/2026
+Last Updated: 2/12/2026
 -----------------------------------------------------------------------------*/
 
 
