@@ -2,7 +2,7 @@
 Hands-On Lab: Intro to Data Engineering with Notebooks
 Script:       setup.sql
 Author:       Jeremiah Hansen
-Last Updated: 2/9/2026
+Last Updated: 2/12/2026
 -----------------------------------------------------------------------------*/
 
 
@@ -50,17 +50,6 @@ USE SCHEMA INTEGRATIONS;
 CREATE OR REPLACE STAGE FROSTBYTE_RAW_STAGE
     URL = 's3://sfquickstarts/data-engineering-with-snowpark-python/'
 ;
-
--- This is a schema level object
-CREATE OR REPLACE NETWORK RULE PYPI_NETWORK_RULE
-MODE = EGRESS
-TYPE = HOST_PORT
-VALUE_LIST = ('pypi.org', 'pypi.python.org', 'pythonhosted.org', 'files.pythonhosted.org');
-
--- This is an account level object
-CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION PYPI_ACCESS_INTEGRATION
-ALLOWED_NETWORK_RULES = (PYPI_NETWORK_RULE)
-ENABLED = true;
 
 
 -- ----------------------------------------------------------------------------
