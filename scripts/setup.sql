@@ -1,20 +1,15 @@
 /*-----------------------------------------------------------------------------
 Hands-On Lab: Intro to Data Engineering with Notebooks
-Script:       bootstrap.sql
+Script:       setup.sql
 Author:       Jeremiah Hansen
-Last Updated: 6/11/2024
+Last Updated: 2/12/2026
 -----------------------------------------------------------------------------*/
-
-SET MY_USER = CURRENT_USER();
-SET GITHUB_SECRET_USERNAME = 'username';
-SET GITHUB_SECRET_PASSWORD = 'personal access token';
-SET GITHUB_URL_PREFIX = 'https://github.com/username';
-SET GITHUB_REPO_ORIGIN = 'https://github.com/username/sfguide-data-engineering-with-notebooks.git';
 
 
 -- ----------------------------------------------------------------------------
 -- Create the account level objects (ACCOUNTADMIN part)
 -- ----------------------------------------------------------------------------
+SET MY_USER = CURRENT_USER();
 USE ROLE ACCOUNTADMIN;
 
 -- Roles
@@ -55,28 +50,6 @@ USE SCHEMA INTEGRATIONS;
 CREATE OR REPLACE STAGE FROSTBYTE_RAW_STAGE
     URL = 's3://sfquickstarts/data-engineering-with-snowpark-python/'
 ;
-
--- Secrets (schema level)
-CREATE OR REPLACE SECRET DEMO_GITHUB_SECRET
-  TYPE = password
-  USERNAME = $GITHUB_SECRET_USERNAME
-  PASSWORD = $GITHUB_SECRET_PASSWORD;
-
--- API Integration (account level)
--- This depends on the schema level secret!
-CREATE OR REPLACE API INTEGRATION DEMO_GITHUB_API_INTEGRATION
-  API_PROVIDER = GIT_HTTPS_API
-  API_ALLOWED_PREFIXES = ($GITHUB_URL_PREFIX)
-  ALLOWED_AUTHENTICATION_SECRETS = (DEMO_GITHUB_SECRET)
-  ENABLED = TRUE;
-
--- Create the "dev" branch in your repo
-
--- Git Repository
-CREATE OR REPLACE GIT REPOSITORY DEMO_GIT_REPO
-  API_INTEGRATION = DEMO_GITHUB_API_INTEGRATION
-  GIT_CREDENTIALS = DEMO_GITHUB_SECRET
-  ORIGIN = $GITHUB_REPO_ORIGIN;
 
 
 -- ----------------------------------------------------------------------------
