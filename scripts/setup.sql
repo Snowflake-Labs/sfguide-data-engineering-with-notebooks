@@ -2,12 +2,12 @@
 Hands-On Lab: Intro to Data Engineering with Notebooks
 Script:       setup.sql
 Author:       Jeremiah Hansen
-Last Updated: 2/12/2026
+Last Updated: 2/27/2026
 -----------------------------------------------------------------------------*/
 
 
 -- ----------------------------------------------------------------------------
--- Create the account level objects (ACCOUNTADMIN part)
+-- Create the account level objects
 -- ----------------------------------------------------------------------------
 SET MY_USER = CURRENT_USER();
 USE ROLE ACCOUNTADMIN;
@@ -22,6 +22,7 @@ GRANT EXECUTE TASK ON ACCOUNT TO ROLE DEMO_ROLE;
 GRANT EXECUTE MANAGED TASK ON ACCOUNT TO ROLE DEMO_ROLE;
 GRANT MONITOR EXECUTION ON ACCOUNT TO ROLE DEMO_ROLE;
 GRANT IMPORTED PRIVILEGES ON DATABASE SNOWFLAKE TO ROLE DEMO_ROLE;
+--GRANT USAGE ON INTEGRATION GITHUB_API_INTEGRATION TO ROLE DEMO_ROLE;
 
 -- Databases
 CREATE OR REPLACE DATABASE DEMO_DB;
@@ -50,6 +51,25 @@ USE SCHEMA INTEGRATIONS;
 CREATE OR REPLACE STAGE FROSTBYTE_RAW_STAGE
     URL = 's3://sfquickstarts/data-engineering-with-snowpark-python/'
 ;
+
+
+-- ----------------------------------------------------------------------------
+-- Create the PyPI external access integration
+-- ----------------------------------------------------------------------------
+USE ROLE ACCOUNTADMIN;
+
+-- This is a schema level object
+CREATE OR REPLACE NETWORK RULE DEMO_DB.INTEGRATIONS.PYPI_NETWORK_RULE
+MODE = EGRESS
+TYPE = HOST_PORT
+VALUE_LIST = ('pypi.org', 'pypi.python.org', 'pythonhosted.org', 'files.pythonhosted.org');
+
+-- This is an account level object
+CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION PYPI_ACCESS_INTEGRATION
+ALLOWED_NETWORK_RULES = (PYPI_NETWORK_RULE)
+ENABLED = true;
+
+GRANT USAGE ON INTEGRATION PYPI_ACCESS_INTEGRATION TO ROLE DEMO_ROLE;
 
 
 -- ----------------------------------------------------------------------------
