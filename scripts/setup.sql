@@ -55,21 +55,21 @@ CREATE OR REPLACE STAGE FROSTBYTE_RAW_STAGE
 
 -- ----------------------------------------------------------------------------
 -- Create the PyPI external access integration
+-- NOTE: External access integrations are not supported on trial accounts.
+--       Comment out this section if running on a trial account.
 -- ----------------------------------------------------------------------------
-USE ROLE ACCOUNTADMIN;
+-- USE ROLE ACCOUNTADMIN;
 
--- This is a schema level object
-CREATE OR REPLACE NETWORK RULE DEMO_DB.INTEGRATIONS.PYPI_NETWORK_RULE
-MODE = EGRESS
-TYPE = HOST_PORT
-VALUE_LIST = ('pypi.org', 'pypi.python.org', 'pythonhosted.org', 'files.pythonhosted.org');
+-- CREATE OR REPLACE NETWORK RULE DEMO_DB.INTEGRATIONS.PYPI_NETWORK_RULE
+-- MODE = EGRESS
+-- TYPE = HOST_PORT
+-- VALUE_LIST = ('pypi.org', 'pypi.python.org', 'pythonhosted.org', 'files.pythonhosted.org');
 
--- This is an account level object
-CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION PYPI_ACCESS_INTEGRATION
-ALLOWED_NETWORK_RULES = (PYPI_NETWORK_RULE)
-ENABLED = true;
+-- CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION PYPI_ACCESS_INTEGRATION
+-- ALLOWED_NETWORK_RULES = (PYPI_NETWORK_RULE)
+-- ENABLED = true;
 
-GRANT USAGE ON INTEGRATION PYPI_ACCESS_INTEGRATION TO ROLE DEMO_ROLE;
+-- GRANT USAGE ON INTEGRATION PYPI_ACCESS_INTEGRATION TO ROLE DEMO_ROLE;
 
 
 -- ----------------------------------------------------------------------------
