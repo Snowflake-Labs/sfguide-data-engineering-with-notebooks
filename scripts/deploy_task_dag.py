@@ -19,8 +19,8 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     warehouse_name = "DEMO_WH"
     dag_name = "DEMO_DAG"
     compute_pool = "SYSTEM_COMPUTE_POOL_CPU"
-    runtime = "V2.2-CPU-PY3.12"
-    external_access_integration = "PYPI_ACCESS_INTEGRATION"
+    runtime = "V2.5-CPU-PY3.12"
+    artifact_repository = "SNOWFLAKE.SNOWPARK.PYPI_SHARED_REPOSITORY"
 
     api_root = Root(session)
     schema = api_root.databases[database_name].schemas[schema_name]
@@ -39,7 +39,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
                 COMPUTE_POOL = {compute_pool}
                 RUNTIME = '{runtime}'
                 QUERY_WAREHOUSE = {warehouse_name}
-                EXTERNAL_ACCESS_INTEGRATIONS = ('{external_access_integration}')
+                ARTIFACT_REPOSITORIES = ({artifact_repository})
                 ARGUMENTS = '--database-name {database_name} --schema-name {schema_name}'
             ''', warehouse=warehouse_name)
         dag_task2 = DAGTask("LOAD_DAILY_CITY_METRICS", definition=f'''
