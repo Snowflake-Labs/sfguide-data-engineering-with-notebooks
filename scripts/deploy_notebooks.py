@@ -1,3 +1,5 @@
+# Deploy notebook projects to Snowflake using the workspace active session
+# Co-authored with CoCo
 #------------------------------------------------------------------------------
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       deploy_notebooks.py
@@ -5,10 +7,14 @@
 # Last Updated: 2/12/2026
 #------------------------------------------------------------------------------
 
-from snowflake.snowpark import Session
+from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark import context
+
+# Use the workspace's active session instead of manual credentials
+session = get_active_session()
 
 
-def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
+def main(session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
     Deploy a notebook project to Snowflake.
 
@@ -49,11 +55,11 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 # For local debugging
 if __name__ == "__main__":
     import sys
-    from session_utils import get_snowpark_session
+    #from session_utils import get_snowpark_session
 
     # Get a Snowpark session (works in notebook, local, and CI/CD)
     # Note: Session is intentionally never closed to avoid issues in notebooks
-    session = get_snowpark_session()
+    session = context.get_active_session()
 
     if len(sys.argv) > 4:
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
