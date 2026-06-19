@@ -16,7 +16,9 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     2. Uploads all files from the local folder to the stage
     3. Creates or updates the notebook project from the staged files
     """
-    # Step 1: Get a temporary stage from the session
+    # Step 1: Set session context and get a temporary stage
+    session.sql(f"USE DATABASE {database_name}").collect()
+    session.sql(f"USE SCHEMA {schema_name}").collect()
     session_stage = session.get_session_stage()
     print(f"Using session stage: {session_stage}")
 
