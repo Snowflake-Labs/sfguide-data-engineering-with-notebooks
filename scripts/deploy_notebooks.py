@@ -25,7 +25,7 @@ connection_parameters = {
     "schema": os.environ.get("SNOWFLAKE_SCHEMA"),
 }
 
-session = session.builder.configs(connection_parameters).create()
+session = Session.builder.configs(connection_parameters).create()
 
 
 def main(session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
