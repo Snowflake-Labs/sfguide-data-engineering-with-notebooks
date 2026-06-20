@@ -14,5 +14,5 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Debug user secret variable #  Dashes are only expected here (nested list)
         run: |
-          echo "User is: ${{ secrets.SNOWFLAKE_USER }}"
+          echo "User is: ${{ vars.SNOWFLAKE_USER }}"
 
