@@ -7,6 +7,15 @@
 
 from snowflake.snowpark import Session
 
+connection_parameters = {
+    "account": os.environ["SNOWFLAKE_ACCOUNT"],
+    "user": os.environ["SNOWFLAKE_USER"],
+    "password": os.environ["SNOWFLAKE_PASSWORD"],
+    "database": os.environ["SNOWFLAKE_DATABASE"],
+    "schema": os.environ["SNOWFLAKE_SCHEMA"],
+}
+
+session = Session.builder.configs(connection_parameters).create()
 
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
@@ -51,7 +60,7 @@ if __name__ == "__main__":
 
     # Get a Snowpark session (works in notebook, local, and CI/CD)
     # Note: Session is intentionally never closed to avoid issues in notebooks
-    session = get_snowpark_session()
+    session = Session.builder.configs(connection_parameters).create()
 
     if len(sys.argv) > 4:
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
