@@ -6,7 +6,7 @@
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
-imprt os
+import os
 
 connection_parameters = {
     "account": os.environ["SNOWFLAKE_ACCOUNT"],
