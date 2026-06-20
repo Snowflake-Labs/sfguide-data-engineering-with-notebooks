@@ -53,6 +53,9 @@ if __name__ == "__main__":
     # Note: Session is intentionally never closed to avoid issues in notebooks
     session = get_snowpark_session()
     print(f"Number of arguments: {len(sys.argv)}")
+    print(f"And they are: ")
+    for i in range(len(sys.argv)):
+        print(sys.argv[i])
     if len(sys.argv) > 4:
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
     else:
