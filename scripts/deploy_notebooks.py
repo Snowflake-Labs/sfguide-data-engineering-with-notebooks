@@ -36,7 +36,9 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 
     if project_exists:
         print(f"Notebook project exists, adding new version...")
-        session.sql(f"ALTER NOTEBOOK PROJECT {full_project_name} ADD VERSION FROM '{stage_path}'").collect()
+        stage_df = session.sql(f"ALTER NOTEBOOK PROJECT {full_project_name} ADD VERSION FROM '{stage_path}'").collect()
+        for row in stage_df:
+            print(row)
     else:
         print(f"Creating new notebook project...")
         session.sql(f"CREATE NOTEBOOK PROJECT {full_project_name} FROM '{stage_path}'").collect()
