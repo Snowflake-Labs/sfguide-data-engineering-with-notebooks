@@ -6,7 +6,28 @@
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
+from snowflake.snowpark import Session
 
+username = os.environ.get('SF_USERNAME')
+password = os.environ.get('SF_PASSWORD')
+account = os.environ.get('SF_ACCOUNT')
+database = os.environ.get('SF_DATABASE')
+schema = os.environ.get('SF_SCHEMA')
+warehouse = os.environ.get('SF_WAREHOUSE')
+
+# Establish the connection using parameters
+connection_parameters = {
+    "account": os.environ.get('SNOWFLAKE_ACCOUNT'),
+    "user": os.environ.get('SNOWFLAKE_USER'),
+    "password":os.environ.get('SNOWFLAKE_PASSWORD'),
+    "role": os.environ.get('SNOWFLAKE_ROLE'),
+    "warehouse": os.environ.get('SNOWFLAKE_WAREHOUSE'),
+    "database": os.environ.get('SNOWFLAKE_DATABASE'),
+    "schema": os.environ.get('SNOWFLAKE_SCHEMA')
+}
+
+# Create the session
+session = Session.builder.configs(connection_parameters).create()
 
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
