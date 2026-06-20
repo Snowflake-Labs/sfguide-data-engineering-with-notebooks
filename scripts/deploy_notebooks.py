@@ -5,26 +5,9 @@
 # Last Updated: 2/12/2026
 #------------------------------------------------------------------------------
 
-from snowflake.snowpark.context import get_active_session
-from snowflake.snowpark import context
-
-# Use the workspace's active session instead of manual credentials
 from snowflake.snowpark import Session
-import os
 
-# Fetch credentials from your GitHub Secrets
-connection_parameters = {
-    "account": os.environ.get("SNOWFLAKE_ACCOUNT"),
-    "user": os.environ.get("SNOWFLAKE_USER"),
-    "password": os.environ.get("SNOWFLAKE_PASSWORD"),
-    "role": os.environ.get("SNOWFLAKE_ROLE"),
-    "warehouse": os.environ.get("SNOWFLAKE_WAREHOUSE"),
-    "database": os.environ.get("SNOWFLAKE_DATABASE"),
-    "schema": os.environ.get("SNOWFLAKE_SCHEMA"),
-}
 
-#session = Session.builder.configs(connection_parameters).create()
-session = context.get_active_session()
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
     Deploy a notebook project to Snowflake.
@@ -64,11 +47,11 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 # For local debugging
 if __name__ == "__main__":
     import sys
-    #from session_utils import get_snowpark_session
+    from session_utils import get_snowpark_session
 
     # Get a Snowpark session (works in notebook, local, and CI/CD)
     # Note: Session is intentionally never closed to avoid issues in notebooks
-    session = context.get_active_session()
+    session = get_snowpark_session()
 
     if len(sys.argv) > 4:
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
