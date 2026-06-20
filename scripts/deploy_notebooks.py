@@ -6,14 +6,7 @@
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
-from snowflake.snowpark import Session
-
-username = os.environ.get('SF_USERNAME')
-password = os.environ.get('SF_PASSWORD')
-account = os.environ.get('SF_ACCOUNT')
-database = os.environ.get('SF_DATABASE')
-schema = os.environ.get('SF_SCHEMA')
-warehouse = os.environ.get('SF_WAREHOUSE')
+import os
 
 # Establish the connection using parameters
 connection_parameters = {
