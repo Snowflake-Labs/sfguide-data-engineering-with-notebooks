@@ -23,8 +23,8 @@ connection_parameters = {
     "schema": os.environ.get("SNOWFLAKE_SCHEMA"),
 }
 
-session = Session.builder.configs(connection_parameters).create()
-
+#session = Session.builder.configs(connection_parameters).create()
+session = context.get_active_session()
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
     Deploy a notebook project to Snowflake.
