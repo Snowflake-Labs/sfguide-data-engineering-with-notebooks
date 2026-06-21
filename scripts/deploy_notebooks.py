@@ -37,8 +37,11 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     stage_path = session_stage
 
     if project_exists:
+        old_notebook_name = full_project_name
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        new_notebook_name = f"{old_notebook_name}_{timestamp}"
         print(f"Notebook project exists, adding new version...")
-        session.sql(f"ALTER NOTEBOOK PROJECT {full_project_name} ADD VERSION FROM '{stage_path}'").collect()
+        session.sql(f"ALTER NOTEBOOK {old_notebook_name} RENAME TO {new_notebook_name}")
     else:
         print(f"Creating new notebook project...")
         session.sql(f"CREATE NOTEBOOK PROJECT {full_project_name} FROM '{stage_path}'").collect()
