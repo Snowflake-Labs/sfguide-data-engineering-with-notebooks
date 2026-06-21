@@ -1,3 +1,5 @@
+# Script to deploy notebook projects to Snowflake
+# Co-authored with CoCo
 #------------------------------------------------------------------------------
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       deploy_notebooks.py
@@ -36,9 +38,7 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
 
     if project_exists:
         print(f"Notebook project exists, adding new version...")
-        stage_df = session.sql(f"ALTER NOTEBOOK PROJECT {full_project_name} ADD VERSION FROM '{stage_path}'").collect()
-        for row in stage_df:
-            print(row)
+        session.sql(f"ALTER NOTEBOOK PROJECT {full_project_name} ADD VERSION FROM '{stage_path}'").collect()
     else:
         print(f"Creating new notebook project...")
         session.sql(f"CREATE NOTEBOOK PROJECT {full_project_name} FROM '{stage_path}'").collect()
@@ -54,10 +54,7 @@ if __name__ == "__main__":
     # Get a Snowpark session (works in notebook, local, and CI/CD)
     # Note: Session is intentionally never closed to avoid issues in notebooks
     session = get_snowpark_session()
-    print(f"Number of arguments: {len(sys.argv)}")
-    print(f"And they are: ")
-    for i in range(len(sys.argv)):
-        print(sys.argv[i])
+    
     if len(sys.argv) > 4:
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
     else:
