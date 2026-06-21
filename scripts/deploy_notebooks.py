@@ -8,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
-
+import datetime
 
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
