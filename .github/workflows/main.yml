@@ -1,0 +1,20 @@
+name: Debug Environment Variablesw #  Correct: Top-level mapping
+on:
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Debug user secret variable #  Dashes are only expected here (nested list)
+        env:
+          MY_USER_SECRET: ${{ secrets.SNOWFLAKE_USER}}
+        run: |
+          # If you echo this, GitHub will print *** to protect your logs
+          echo "The secret is masked: $MY_USER_SECRET"

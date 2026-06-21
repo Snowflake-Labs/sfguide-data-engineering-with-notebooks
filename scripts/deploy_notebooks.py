@@ -1,3 +1,5 @@
+# Script to deploy notebook projects to Snowflake
+# Co-authored with CoCo
 #------------------------------------------------------------------------------
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       deploy_notebooks.py
@@ -6,7 +8,7 @@
 #------------------------------------------------------------------------------
 
 from snowflake.snowpark import Session
-
+import datetime
 
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
@@ -35,8 +37,11 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     stage_path = session_stage
 
     if project_exists:
+        old_notebook_name = full_project_name
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        new_notebook_name = f"{old_notebook_name}_{timestamp}"
         print(f"Notebook project exists, adding new version...")
-        session.sql(f"ALTER NOTEBOOK PROJECT {full_project_name} ADD VERSION FROM '{stage_path}'").collect()
+        session.sql(f"ALTER NOTEBOOK {old_notebook_name} RENAME TO {new_notebook_name}")
     else:
         print(f"Creating new notebook project...")
         session.sql(f"CREATE NOTEBOOK PROJECT {full_project_name} FROM '{stage_path}'").collect()
@@ -52,7 +57,7 @@ if __name__ == "__main__":
     # Get a Snowpark session (works in notebook, local, and CI/CD)
     # Note: Session is intentionally never closed to avoid issues in notebooks
     session = get_snowpark_session()
-
+    
     if len(sys.argv) > 4:
         print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
     else:
