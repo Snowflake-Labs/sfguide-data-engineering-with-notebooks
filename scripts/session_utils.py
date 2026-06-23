@@ -1,3 +1,5 @@
+# Session utility supporting notebook, env vars, SNOWFLAKE_CONNECTIONS_DEFAULT_*, and connections.toml
+# Co-authored with CoCo
 #------------------------------------------------------------------------------
 # Hands-On Lab: Intro to Data Engineering with Notebooks
 # Script:       session_utils.py
@@ -48,7 +50,12 @@ def get_snowpark_session() -> Session:
         print("Creating session from environment variables")
         return _create_session_from_env()
     
-    # 3. Fall back to connections.toml (local development)
+    # 3. Check for SNOWFLAKE_CONNECTIONS_DEFAULT_* env vars (GitHub Actions / Snowflake CLI pattern)
+    if os.environ.get("SNOWFLAKE_CONNECTIONS_DEFAULT_ACCOUNT"):
+        print("Creating session from SNOWFLAKE_CONNECTIONS_DEFAULT_* environment variables")
+        return _create_session_from_connections_env()
+    
+    # 4. Fall back to connections.toml (local development)
     print("Creating session from connections.toml")
     return Session.builder.getOrCreate()
 
@@ -105,4 +112,33 @@ def _create_session_from_env() -> Session:
         if value:
             connection_params[param_name] = value
     
+    return Session.builder.configs(connection_params).create()
+
+
+def _create_session_from_connections_env() -> Session:
+    """
+    Create a Snowpark session using SNOWFLAKE_CONNECTIONS_DEFAULT_* environment variables.
+    This is the pattern used by GitHub Actions and the Snowflake CLI.
+    """
+    prefix = "SNOWFLAKE_CONNECTIONS_DEFAULT_"
+    connection_params = {
+        "account": os.environ[f"{prefix}ACCOUNT"],
+        "user": os.environ.get(f"{prefix}USER", ""),
+    }
+
+    if os.environ.get(f"{prefix}PASSWORD"):
+        connection_params["password"] = os.environ[f"{prefix}PASSWORD"]
+
+    optional_params = {
+        "warehouse": f"{prefix}WAREHOUSE",
+        "database": f"{prefix}DATABASE",
+        "schema": f"{prefix}SCHEMA",
+        "role": f"{prefix}ROLE",
+    }
+
+    for param_name, env_var in optional_params.items():
+        value = os.environ.get(env_var)
+        if value:
+            connection_params[param_name] = value
+
     return Session.builder.configs(connection_params).create()
