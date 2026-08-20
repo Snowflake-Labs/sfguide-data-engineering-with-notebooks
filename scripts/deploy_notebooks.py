@@ -8,7 +8,7 @@
 from snowflake.snowpark import Session
 
 
-def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
+def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str, role_name: str = None) -> str:
     """
     Deploy a notebook project to Snowflake.
 
@@ -16,7 +16,11 @@ def main(session: Session, database_name: str, schema_name: str, notebook_projec
     2. Uploads all files from the local folder to the stage
     3. Creates or updates the notebook project from the staged files
     """
-    # Step 1: Get a temporary stage from the session
+    # Step 1: Set session context and get a temporary stage
+    if role_name:
+        session.use_role(role_name)
+    session.use_database(database_name)
+    session.use_schema(schema_name)
     session_stage = session.get_session_stage()
     print(f"Using session stage: {session_stage}")
 
@@ -54,6 +58,7 @@ if __name__ == "__main__":
     session = get_snowpark_session()
 
     if len(sys.argv) > 4:
-        print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
+        role = sys.argv[5] if len(sys.argv) > 5 else None
+        print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], role))
     else:
-        print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project> <local_folder_path>")
+        print("Usage: python deploy_notebooks.py <database> <schema> <notebook_project> <local_folder_path> [role]")

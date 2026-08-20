@@ -12,9 +12,12 @@ from datetime import timedelta
 
 
 # Create the tasks using the DAG API
-def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str) -> str:
+def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, role_name: str = None) -> str:
     # Set the environment context
-#    session.use_schema(f"{database_name}.{schema_name}")
+    if role_name:
+        session.use_role(role_name)
+    session.use_database(database_name)
+    session.use_schema(schema_name)
 
     warehouse_name = "DEMO_WH"
     dag_name = "DEMO_DAG"
@@ -74,6 +77,7 @@ if __name__ == "__main__":
     session = get_snowpark_session()
 
     if len(sys.argv) > 3:
-        print(main(session, sys.argv[1], sys.argv[2], sys.argv[3]))
+        role = sys.argv[4] if len(sys.argv) > 4 else None
+        print(main(session, sys.argv[1], sys.argv[2], sys.argv[3], role))
     else:
-        print("Usage: python deploy_task_dag.py <database> <schema> <notebook_project>")
+        print("Usage: python deploy_task_dag.py <database> <schema> <notebook_project> [role]")
