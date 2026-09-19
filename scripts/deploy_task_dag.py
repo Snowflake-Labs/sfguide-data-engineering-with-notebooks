@@ -10,6 +10,40 @@ from snowflake.core import Root
 from snowflake.core.task.dagv1 import DAGOperation, DAG, DAGTask
 from datetime import timedelta
 
+import os
+import sys
+database = sys.argv[1]  # DEMO_DB
+schema = sys.argv[2]    # DEV_SCHEMA
+
+try:
+    # 1. Attempt to get the active session (works in Snowsight Notebooks)
+    from snowflake.snowpark.context import get_active_session
+    session = get_active_session()
+    print("✅ Using active Snowsight session.")
+except Exception as e:
+    # 2. If no active session, create an explicit one (for CI/CD)
+    print(f"⚠️ No active session found ({e}). Creating explicit session for CI/CD...")
+    
+    # Check for required environment variables before attempting to connect
+    required_vars = ["SNOWFLAKE_ACCOUNT", "SNOWFLAKE_USER", "SNOWFLAKE_PASSWORD"]
+    missing = [v for v in required_vars if not os.environ.get(v)]
+    if missing:
+        raise ValueError(f"❌ Missing required environment variables for CI/CD session: {missing}")
+    
+    # Create the explicit session
+    session = Session.builder.configs({
+        "account":   os.environ["SNOWFLAKE_ACCOUNT"],
+        "user":      os.environ["SNOWFLAKE_USER"],
+        "password":  os.environ["SNOWFLAKE_PASSWORD"],
+        "role":      os.environ.get("SNOWFLAKE_ROLE"),
+        "warehouse": os.environ.get("SNOWFLAKE_WAREHOUSE"),
+        "database":  os.environ.get("SNOWFLAKE_DATABASE"),
+        "schema":    os.environ.get("SNOWFLAKE_SCHEMA"),
+    }).create()
+    print("✅ Explicit session created for CI/CD.")
+
+session.sql(f"USE DATABASE {database}").collect()
+session.sql(f"USE SCHEMA {schema}").collect()
 
 # Create the tasks using the DAG API
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str) -> str:

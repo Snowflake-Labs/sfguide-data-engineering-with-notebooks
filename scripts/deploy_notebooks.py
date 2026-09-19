@@ -5,9 +5,73 @@
 # Last Updated: 2/12/2026
 #------------------------------------------------------------------------------
 
+import os
+import sys
+
 from snowflake.snowpark import Session
+from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark.exceptions import SnowparkSessionException
 
+database = sys.argv[1]
+schema = sys.argv[2]
 
+print("🔵 Before get_active_session()", flush=True)
+
+try:
+    session = get_active_session()
+
+    print("🟢 get_active_session() returned", flush=True)
+    print(f"Session: {session}", flush=True)
+
+except BaseException as e:
+    print("🔴 EXCEPT WAS ENTERED", flush=True)
+    session = None
+
+    print(f"Exception type: {type(e).__name__}", flush=True)
+    print(f"Exception: {e}", flush=True)
+
+    required_vars = [
+        "SNOWFLAKE_ACCOUNT",
+        "SNOWFLAKE_USER",
+        "SNOWFLAKE_PASSWORD",
+    ]
+
+    missing = [v for v in required_vars if not os.environ.get(v)]
+
+    if missing:
+        raise ValueError(
+            f"❌ Missing required environment variables: {missing}"
+        )
+
+    try:
+        session = Session.builder.configs({
+            "account":   os.environ["SNOWFLAKE_ACCOUNT"],
+            "user":      os.environ["SNOWFLAKE_USER"],
+            "password":  os.environ["SNOWFLAKE_PASSWORD"],
+            "role":      os.environ.get("SNOWFLAKE_ROLE"),
+            "warehouse": os.environ.get("SNOWFLAKE_WAREHOUSE"),
+            "database":  os.environ.get("SNOWFLAKE_DATABASE"),
+            "schema":    os.environ.get("SNOWFLAKE_SCHEMA"),
+        }).create()
+    except SnowparkSessionException as e:
+        print(f"Snowpark session error: {e}")
+        raise
+    except Exception as e:
+        print(f"Connection error: {type(e).__name__}: {e}")
+        raise
+
+    print("✅ Explicit session created.", flush=True)
+
+print("🔵 Before USE DATABASE", flush=True)
+
+session.sql(f"USE DATABASE {database}").collect()
+
+print("🔵 Before USE SCHEMA", flush=True)
+
+session.sql(f"USE SCHEMA {schema}").collect()
+
+print("✅ Finished.", flush=True)
+    
 def main(session: Session, database_name: str, schema_name: str, notebook_project_name: str, local_folder_path: str) -> str:
     """
     Deploy a notebook project to Snowflake.
